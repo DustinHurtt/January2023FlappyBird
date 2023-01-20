@@ -9,6 +9,15 @@ bgImage.src = "../images/bg.png"
 const fabyImage = new Image()
 fabyImage.src = "../images/flappy.png"
 
+const topPipeImage = new Image ()
+topPipeImage.src = "../images/obstacle_top.png"
+
+const bottomPipeImage = new Image ()
+bottomPipeImage.src = "../images/obstacle_bottom.png"
+
+let pipesIntervalId
+let animationLoopId
+
 const faby = {
   x: 0,
   y: 0,
@@ -26,13 +35,61 @@ const faby = {
   }
 }
 
-// width
-// height
-// speedX
-// speedY
-// gravity
-// gravitySpeed
-// And the functions update and newPos to keep updating its position in every update.
+class Pipe {
+  constructor() {
+
+    this.sharedX = 900
+
+    this.spaceBetween = 200
+
+    this.topPipeX = 0
+    this.topPipeY = 0
+
+    this.bottomPipeX = this.sharedX
+    this.bottomPipeY = 200 + (Math.round(Math.random() * 400))
+
+
+  }
+
+  update() {
+    this.bottomPipeX = this.bottomPipeX - 2
+  }
+
+  draw() {
+
+    ctx.drawImage(bottomPipeImage, this.bottomPipeX, this.bottomPipeY)
+
+  }  
+
+}
+
+let pipesArray = []
+
+function generatePipes () {
+  pipesIntervalId = setInterval(() => {
+    pipesArray.push(new Pipe())
+    console.log("Pipes:", pipesArray)
+  }, 2000)
+}
+
+function animationLoop () {
+  animationLoopId = setInterval(() => {
+
+
+
+    ctx.clearRect(0,0,1200,600)
+
+    ctx.drawImage(bgImage, 0, 0, 1200, 600)
+
+    ctx.drawImage(fabyImage, 400, 200, 75, 50)
+  
+    for (let i = 0; i < pipesArray.length; i++) {
+      pipesArray[i].update()
+      pipesArray[i].draw()
+    }
+
+  }, 16)
+}
 
 function startGame() {
 
@@ -44,9 +101,8 @@ function startGame() {
   canvas.height = "600"
   canvas.style.visibility = "visible"
 
-  ctx.drawImage(bgImage, 0, 0, 1200, 600)
-
-  ctx.drawImage(fabyImage, 400, 200, 75, 50)
+  animationLoop()
+  generatePipes()
 
 }
 
