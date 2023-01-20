@@ -19,7 +19,8 @@ body button {
 }
 
 canvas {
-  border: 2px solid
+  border: 2px solid;
+  visibility: hidden;
 }
 
 
